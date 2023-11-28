@@ -3,8 +3,8 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "StoresDataLake",
-				"type": "Copy",
+				"name": "CopyCsvToSqlPool",
+				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -15,110 +15,16 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
+					"dataflow": {
+						"referenceName": "01_copy_to_sql_pol",
+						"type": "DataFlowReference"
 					},
-					"sink": {
-						"type": "SqlDWSink",
-						"allowCopyCommand": true
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
 					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"mappings": [
-							{
-								"source": {
-									"name": "StoreKey",
-									"type": "String"
-								},
-								"sink": {
-									"name": "StoreKey",
-									"type": "Int32"
-								}
-							},
-							{
-								"source": {
-									"name": "GeographyKey",
-									"type": "String"
-								},
-								"sink": {
-									"name": "GeographyKey",
-									"type": "Int32"
-								}
-							},
-							{
-								"source": {
-									"name": "StoreName",
-									"type": "String"
-								},
-								"sink": {
-									"name": "StoreName",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "Status",
-									"type": "String"
-								},
-								"sink": {
-									"name": "Status_name",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "CloseReason",
-									"type": "String"
-								},
-								"sink": {
-									"name": "CloseReason",
-									"type": "String"
-								}
-							},
-							{
-								"source": {
-									"name": "EmployeeCount",
-									"type": "String"
-								},
-								"sink": {
-									"name": "EmployeeCount",
-									"type": "Int32"
-								}
-							},
-							{
-								"source": {
-									"name": "SellingAreaSize",
-									"type": "String"
-								},
-								"sink": {
-									"name": "SellingArea",
-									"type": "Int32"
-								}
-							}
-						]
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "CSVDataToCopy",
-						"type": "DatasetReference"
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "asa_sql_pool",
-						"type": "DatasetReference"
-					}
-				]
+					"traceLevel": "Fine"
+				}
 			}
 		],
 		"annotations": []
