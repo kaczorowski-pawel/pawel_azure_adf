@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeService'"
 		},
+		"AzureSynapsService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapsService'"
+		},
 		"AzureDataLakeService_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pawelkaczstorage2.dfs.core.windows.net/"
@@ -228,6 +232,60 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/asa_sql_pool')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapsService",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [
+					{
+						"name": "StoreKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "GeographyKey",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "StoreName",
+						"type": "varchar"
+					},
+					{
+						"name": "Status_name",
+						"type": "varchar"
+					},
+					{
+						"name": "CloseReason",
+						"type": "varchar"
+					},
+					{
+						"name": "EmployeeCount",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "SellingArea",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "Contoso_stores"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapsService')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeService')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -240,6 +298,19 @@
 						"type": "SecureString",
 						"value": "[parameters('AzureDataLakeService_accountKey')]"
 					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapsService')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapsService_connectionString')]"
 				}
 			},
 			"dependsOn": []

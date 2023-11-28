@@ -8,6 +8,9 @@
 		"AzureDataLakeService_accountKey": {
 			"value": ""
 		},
+		"AzureSynapsService_connectionString": {
+			"value": ""
+		},
 		"AzureDataLakeService_properties_typeProperties_url": {
 			"value": "https://pawelkaczstorage2.dfs.core.windows.net/"
 		}

@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'AzureDataLakeService'"
 		},
+		"AzureSynapsService_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapsService'"
+		},
 		"AzureDataLakeService_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://pawelkaczstorage2.dfs.core.windows.net/"
@@ -44,6 +48,9 @@
 					},
 					"AzureDataLakeService_accountKey": {
 						"value": "[parameters('AzureDataLakeService_accountKey')]"
+					},
+					"AzureSynapsService_connectionString": {
+						"value": "[parameters('AzureSynapsService_connectionString')]"
 					},
 					"AzureDataLakeService_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeService_properties_typeProperties_url')]"
