@@ -19,6 +19,13 @@
 						"referenceName": "01_copy_to_sql_pol",
 						"type": "DataFlowReference"
 					},
+					"staging": {
+						"linkedService": {
+							"referenceName": "AzureDataLakeService",
+							"type": "LinkedServiceReference"
+						},
+						"folderPath": "pawelkacz2/staging"
+					},
 					"compute": {
 						"coreCount": 8,
 						"computeType": "General"
