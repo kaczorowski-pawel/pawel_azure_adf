@@ -1,0 +1,57 @@
+{
+	"name": "CSVDataToCopy",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Stores_2.csv",
+				"folderPath": "contoso_sales",
+				"fileSystem": "pawelkacz2"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "StoreKey",
+				"type": "String"
+			},
+			{
+				"name": "GeographyKey",
+				"type": "String"
+			},
+			{
+				"name": "StoreType",
+				"type": "String"
+			},
+			{
+				"name": "StoreName",
+				"type": "String"
+			},
+			{
+				"name": "Status",
+				"type": "String"
+			},
+			{
+				"name": "CloseReason",
+				"type": "String"
+			},
+			{
+				"name": "EmployeeCount",
+				"type": "String"
+			},
+			{
+				"name": "SellingAreaSize",
+				"type": "String"
+			}
+		]
+	}
+}
