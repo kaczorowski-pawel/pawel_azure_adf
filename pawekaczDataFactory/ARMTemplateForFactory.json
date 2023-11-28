@@ -100,6 +100,59 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/03_stores_from_csv_to_sql_pool')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CopyStoresToSqlPool",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "01_copy_to_sql_pol",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"Stores": {},
+									"AsaSqlPool": {}
+								}
+							},
+							"staging": {
+								"linkedService": {
+									"referenceName": "AzureDataLakeService",
+									"type": "LinkedServiceReference"
+								},
+								"folderPath": "pawelkacz2/staging"
+							},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/01_copy_to_sql_pol')]",
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeService')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/CSVDataToCopy')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -314,6 +367,84 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/01_copy_to_sql_pol')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "CSVDataToCopy",
+								"type": "DatasetReference"
+							},
+							"name": "Stores"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "asa_sql_pool",
+								"type": "DatasetReference"
+							},
+							"name": "AsaSqlPool"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"source(output(",
+						"          StoreKey as string,",
+						"          GeographyKey as string,",
+						"          StoreType as string,",
+						"          StoreName as string,",
+						"          Status as string,",
+						"          CloseReason as string,",
+						"          EmployeeCount as string,",
+						"          SellingAreaSize as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> Stores",
+						"Stores sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     input(",
+						"          StoreKey as integer,",
+						"          GeographyKey as integer,",
+						"          StoreName as string,",
+						"          Status_name as string,",
+						"          CloseReason as string,",
+						"          EmployeeCount as integer,",
+						"          SellingArea as integer",
+						"     ),",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     staged: true,",
+						"     allowCopyCommand: true,",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          StoreKey,",
+						"          GeographyKey,",
+						"          StoreName,",
+						"          Status_name = Status,",
+						"          CloseReason,",
+						"          EmployeeCount,",
+						"          SellingArea = SellingAreaSize",
+						"     )) ~> AsaSqlPool"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/CSVDataToCopy')]",
+				"[concat(variables('factoryId'), '/datasets/asa_sql_pool')]"
+			]
 		}
 	]
 }
