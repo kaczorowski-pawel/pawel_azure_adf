@@ -1,0 +1,49 @@
+{
+	"name": "asa_sql_pool",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapsService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "StoreKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "GeographyKey",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "StoreName",
+				"type": "varchar"
+			},
+			{
+				"name": "Status_name",
+				"type": "varchar"
+			},
+			{
+				"name": "CloseReason",
+				"type": "varchar"
+			},
+			{
+				"name": "EmployeeCount",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "SellingArea",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "Contoso_stores"
+		}
+	}
+}
